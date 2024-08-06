@@ -1,4 +1,7 @@
-﻿- assuming provider entering specific availabilities rather than selecting from 15-minute increments
+- in-memory DB is seeded with one client and one provider:
+  - provider id: a06cb0b4-7b9b-423b-96fc-14ff2efa7ce9
+  - client id: b385f350-e17a-42df-95ad-1722ae9df831
+- assuming provider entering specific availabilities rather than selecting from 15-minute increments
 - wasn't able to get to unit testing
     - test basic CRUD
     - test availability conditions
