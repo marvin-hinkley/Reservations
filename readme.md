@@ -7,3 +7,4 @@
 - wasn't able to finish containerizing
 - the swagger parameter definitions incorrectly read as required in some cases
 - reservations are not enforced as 15-minute duration. it's possible to overlap with bad data
+- wanted to restrict availability retrieval by provider field and date-time range. both could mitigate performance issues at scale. not enough time
