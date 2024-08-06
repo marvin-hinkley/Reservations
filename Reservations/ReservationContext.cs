@@ -12,7 +12,7 @@ public class ReservationContext(DbContextOptions options) : DbContext(options)
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Reservation>()
-            .HasKey(bc => bc.Id);  
+            .HasKey(bc => bc.Id);
         modelBuilder.Entity<Reservation>()
             .HasOne(bc => bc.Provider)
             .WithMany(b => b.Reservations)
