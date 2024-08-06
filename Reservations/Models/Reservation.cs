@@ -1,12 +1,16 @@
-﻿namespace Reservations.Models;
+﻿using System.Text.Json.Serialization;
+
+namespace Reservations.Models;
 
 public class Reservation
 {
     public Guid Id { get; set; }
     
     public Guid ProviderId { get; set; }
+    [JsonIgnore]
     public Provider Provider { get; set; }
     public Guid? ClientId { get; set; }
+    [JsonIgnore]
     public Client Client { get; set; }
     
     // Beginning time of reservation

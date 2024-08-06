@@ -9,6 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<ReservationContext>(options => options.UseInMemoryDatabase("reservations"));
 builder.Services.AddScoped<IReservationRepository, ReservationRepository>();
 builder.Services.AddScoped<IReservationService, ReservationService>();
+builder.Services.AddScoped<DbInitializer>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options => {
         options.SwaggerDoc("v1", new OpenApiInfo
@@ -70,4 +71,9 @@ app.MapPut("/reservations/confirm/{id:guid}",
     .WithName("ConfirmReservation")
     .WithSummary("Confirm scheduled appointment");
 
+using var scope = app.Services.CreateScope();
+var services = scope.ServiceProvider;
+var dbInitializer = services.GetRequiredService<DbInitializer>();
+
+dbInitializer.Run();
 app.Run();
