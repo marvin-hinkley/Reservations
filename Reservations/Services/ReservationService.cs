@@ -2,25 +2,25 @@
 
 namespace Reservations.Services;
 
-public class ReservationService : IReservationService
+public class ReservationService(IReservationRepository reservationRepository) : IReservationService
 {
-    public Task<IEnumerable<Reservation>> GetAvailableReservations(TimeRange? timeRange = null, Guid? providerId = null, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<Reservation>> GetAvailableReservations(TimeRange? timeRange = null, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        return await reservationRepository.GetAvailableReservations(timeRange, cancellationToken);
     }
 
-    public Task UpdateReservations(IEnumerable<Reservation> reservations, Guid providerId, CancellationToken cancellationToken = default)
+    public async Task UpdateReservations(IEnumerable<Reservation> reservations, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        await reservationRepository.AddAvailableReservations(reservations.ToList(), cancellationToken);
     }
 
-    public Task ScheduleReservation(Reservation reservation, CancellationToken cancellationToken = default)
+    public async Task ScheduleReservation(Guid reservationId, Guid clientId, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        await reservationRepository.ScheduleReservation(reservationId, clientId, cancellationToken);
     }
 
-    public Task ConfirmReservation(Guid id, CancellationToken cancellationToken = default)
+    public async Task ConfirmReservation(Guid id, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        await reservationRepository.ConfirmReservation(id, cancellationToken);
     }
 }

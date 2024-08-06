@@ -1,9 +1,13 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using Reservations;
 using Reservations.Models;
 using Reservations.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddDbContext<ReservationContext>(options => options.UseInMemoryDatabase("reservations"));
+builder.Services.AddScoped<IReservationRepository, ReservationRepository>();
 builder.Services.AddScoped<IReservationService, ReservationService>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options => {
@@ -28,17 +32,17 @@ app.UseSwaggerUI(
 app.MapPost("/reservations/available/{providerId:guid}",
     async ([FromRoute] Guid providerId, [FromBody] IEnumerable<Reservation> reservations, IReservationService reservationService) =>
     {
-        await reservationService.UpdateReservations(reservations, providerId);
+        await reservationService.UpdateReservations(reservations);
     })
     .WithName("UpdateAvailableReservations")
     .WithSummary("Update available reservations")
     .WithDescription("Allows provider to update their availability");
 
 // Get available reservations. optionally within range, optionally with specific provider
-app.MapGet("/reservations/available/{providerId:guid?}",
-    async ([FromRoute] Guid? providerId, [FromBody] TimeRange? timeRange, IReservationService reservationService) =>
+app.MapGet("/reservations/available",
+    async ([FromBody] TimeRange? timeRange, IReservationService reservationService) =>
     {
-        var available = await reservationService.GetAvailableReservations(timeRange, providerId);
+        var available = await reservationService.GetAvailableReservations(timeRange);
         return available;
     })
     .WithName("GetAvailableReservations")
@@ -46,10 +50,13 @@ app.MapGet("/reservations/available/{providerId:guid?}",
     .WithDescription("Optionally based upon time range and specific provider");
 
 // Schedule against an available reservation
-app.MapPut("/reservations/schedule",
-    async ([FromBody] Reservation reservation, IReservationService reservationService) =>
+app.MapPut("/reservations/{reservationId:guid}/schedule/{clientId:guid}",
+    async ([FromRoute] Guid reservationId, [FromRoute] Guid clientId, IReservationService reservationService) =>
     {
-        await reservationService.ScheduleReservation(reservation);
+        await reservationService.ScheduleReservation(
+            reservationId,
+            clientId
+        );
     })
     .WithName("ScheduleReservation")
     .WithSummary("Schedule a new appointment");
