@@ -15,7 +15,9 @@ public class ReservationRepository(ReservationContext reservationContext) : IRes
                 r.Time <= timeRange.End &&
                 r.State == ReservationState.Available
               ).ToListAsync(cancellationToken: cancellationToken)
-            : await ReservationContext.Reservations.ToListAsync(cancellationToken: cancellationToken);
+            : await ReservationContext.Reservations
+                .Where(r => r.State == ReservationState.Available)
+                .ToListAsync(cancellationToken: cancellationToken);
     }
 
     public async Task AddAvailableReservations(List<Reservation> reservations, CancellationToken cancellationToken = default)

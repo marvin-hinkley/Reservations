@@ -19,8 +19,6 @@ public class Reservation
     
     // Beginning time of reservation
     public DateTime Time { get; set; }
-    // Duration of reservation in minutes
-    public int Duration { get; set; } = 15;
     public ReservationState State { get; set; } = ReservationState.Available;
 }
 

@@ -41,9 +41,9 @@ app.MapPost("/reservations/available/{providerId:guid}",
 
 // Get available reservations. optionally within range, optionally with specific provider
 app.MapGet("/reservations/available",
-    async ([FromBody] TimeRange? timeRange, IReservationService reservationService) =>
+    async (IReservationService reservationService) =>
     {
-        var available = await reservationService.GetAvailableReservations(timeRange);
+        var available = await reservationService.GetAvailableReservations();
         return available;
     })
     .WithName("GetAvailableReservations")

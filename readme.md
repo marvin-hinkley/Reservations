@@ -6,3 +6,4 @@
 - EF usage forces referential integrity checks. would be more performant without them, simply relying on foreign key conditions
 - wasn't able to finish containerizing
 - the swagger parameter definitions incorrectly read as required in some cases
+- reservations are not enforced as 15-minute duration. it's possible to overlap with bad data
